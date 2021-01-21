@@ -10,7 +10,7 @@
 				height: 800px;
 			 }
 		</style>
-	</head>
+</head>
 	</head>
 	<body>
 		
@@ -28,222 +28,182 @@
 		<script src="js/controls/OrbitControls.js"></script>
 		<script src="js/dat.gui.min.js"></script>
 		<script>
-		
-		// カラー専用オブジェクトビュワ 0-255
-			// ToDo カラー化 光源で陰影をつける
       var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera( 50, 1.0, 0.1, 1000 );
-      
-	
-      
+      var camera = new THREE.PerspectiveCamera(50, 1.0, 0.1, 1000);
       camera.position.z = 3;
       // fov, aspect ratio, near clip, far clip
-			// 平行光源を作成
+      // 平行光源を作成
       // new THREE.DirectionalLight(色, 光の強さ)
       const light = new THREE.DirectionalLight(0xFFFFFF, 1);
       scene.add(light);
-
       var renderer = new THREE.WebGLRenderer();
-      
-//			{        canvas: document.querySelector('canvas')      });
-      renderer.setSize( 800, 800 );
-      document.getElementById('canvas').appendChild( renderer.domElement );
+      //			{        canvas: document.querySelector('canvas')      });
+      renderer.setSize(800, 800);
+      document.getElementById('canvas').appendChild(renderer.domElement);
       //	カメラの制御
-      var controls = new THREE.OrbitControls (camera, renderer.domElement);
+      var controls = new THREE.OrbitControls(camera, renderer.domElement);
       camera.position.set(0, 0, 3);
       //空のポイントオブジェクト生成（これがないとdat.guiで操作できない）
       const geometry = new THREE.Geometry();
       var material = new THREE.PointsMaterial({});
-      var points = new THREE.Points( geometry, material );
+      var points = new THREE.Points(geometry, material);
       //////
       controls.enableDamping = true;
-	  controls.dampingFactor = 0.2;
-
-			var vertices = [];
-
-      
+      controls.dampingFactor = 0.2;
+      var vertices = [];
 
       function animate() {
-      		
-      			guiObj.Camera_x=camera.position.x;
-      			guiObj.Camera_y=camera.position.y;
-      			guiObj.Camera_z=camera.position.z;
-      		folder.updateDisplay();
-//				renderer.clear();
-        	controls.update();//追加  
-        	//scene.rotation.x += 0.01;
-        	//scene.rotation.y += 0.01;
-          renderer.render( scene, camera );
-          requestAnimationFrame(animate);
+        guiObj.Camera_x = camera.position.x;
+        guiObj.Camera_y = camera.position.y;
+        guiObj.Camera_z = camera.position.z;
+        folder.updateDisplay();
+        //				renderer.clear();
+        controls.update(); //追加  
+        //scene.rotation.x += 0.01;
+        //scene.rotation.y += 0.01;
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
       }
-            //表示/非表示
-            function jikuhyouji()
-            {
-            	//console.log("クリック");
-            	
-            	var ob = scene.getObjectByName( "axes" );
-            	if(ob==null)
-            	{
-            		//表示
-            		var axes = new THREE.AxisHelper(5);
-					axes.name= "axes";
-					scene.add(axes);
-            	}else
-            	{
-            		//非表示
-            		scene.remove(ob);
-            	}
-            	
-            }
-            
-            
-            
-            var guiCtrl = function(){
-		    this.Camera_x = camera.position.x;
-		    this.Camera_y = camera.position.y;
-		    this.Camera_z = camera.position.z;
-		    this.Message = '';
-		    this.ParticleSize=0.3;
-		  	};
-
-			  gui = new dat.GUI();
-			  guiObj = new guiCtrl();
-			  var obj1 = { File:function()
-			  { 
-			  	document.getElementById("selectedFile").click();
-			  }
-			  };
-			  var obj2 = { 軸:function()
-			  { 
-			  	document.getElementById("jiku").click();
-			  	console.log("軸の表示非表示");
-			  }
-			  };
-			  var obj3 = { グリッド:function()
-			  { 
-			  	document.getElementById("grid").click(); 
-			  	console.log("グリッドの表示非表示");
-			  }
-			  };
-			  gui.add(obj1,'File');
-			  gui.add( guiObj, 'ParticleSize', 0, 1 ).onChange(setParticleSize);
-			  var folder = gui.addFolder('CameraPosition');
-			  var folder2 = gui.addFolder('Helper');
-			  folder.add( guiObj, 'Camera_x', 0, 20 ).onChange(setCameraPosition);
-			  folder.add( guiObj, 'Camera_y', 0, 20 ).onChange(setCameraPosition);
-			  folder.add( guiObj, 'Camera_z', 0, 20 ).onChange(setCameraPosition);
-			  folder2.add(obj2,'軸');
-			  folder2.add(obj3,'グリッド');
-			  
-			function setCameraPosition(){
-			camera.position.set(guiObj.Camera_x, guiObj.Camera_y, guiObj.Camera_z);
-			}
-			function setParticleSize(){
-				points.material.size=guiObj.ParticleSize;
-			}
-
- 			// 初期化のために実行
-        onResize();
-        // リサイズイベント発生時に実行
-        window.addEventListener('resize', onResize);
-
-        function onResize() {
-          // サイズを取得
-          const width = window.innerWidth;
-          const height = window.innerHeight;
-
-          // レンダラーのサイズを調整する
-          renderer.setPixelRatio(window.devicePixelRatio);
-          renderer.setSize(width, height);
-
-          // カメラのアスペクト比を正す
-          camera.aspect = width / height;
-          camera.updateProjectionMatrix();
+      //表示/非表示
+      function jikuhyouji() {
+        //console.log("クリック");
+        var ob = scene.getObjectByName("axes");
+        if (ob == null) {
+          //表示
+          var axes = new THREE.AxisHelper(5);
+          axes.name = "axes";
+          scene.add(axes);
+        } else {
+          //非表示
+          scene.remove(ob);
         }
+      }
+      var guiCtrl = function () {
+        this.Camera_x = camera.position.x;
+        this.Camera_y = camera.position.y;
+        this.Camera_z = camera.position.z;
+        this.Message = '';
+        this.ParticleSize = 0.3;
+      };
+      gui = new dat.GUI();
+      guiObj = new guiCtrl();
+      var obj1 = {
+        File: function () {
+          document.getElementById("selectedFile").click();
+        }
+      };
+      var obj2 = {
+        軸: function () {
+          document.getElementById("jiku").click();
+          console.log("軸の表示非表示");
+        }
+      };
+      var obj3 = {
+        グリッド: function () {
+          document.getElementById("grid").click();
+          console.log("グリッドの表示非表示");
+        }
+      };
+      gui.add(obj1, 'File');
+      gui.add(guiObj, 'ParticleSize', 0, 1).onChange(setParticleSize);
+      var folder = gui.addFolder('CameraPosition');
+      var folder2 = gui.addFolder('Helper');
+      folder.add(guiObj, 'Camera_x', 0, 20).onChange(setCameraPosition);
+      folder.add(guiObj, 'Camera_y', 0, 20).onChange(setCameraPosition);
+      folder.add(guiObj, 'Camera_z', 0, 20).onChange(setCameraPosition);
+      folder2.add(obj2, '軸');
+      folder2.add(obj3, 'グリッド');
 
-            function gridhyouji()
-            {
-            	console.log("クリック");
-            	
-            	var ob = scene.getObjectByName( "grid" );
-            	if(ob==null)
-            	{
-            		//表示
-            		var gridHelper = new THREE.GridHelper( 10, 20 );
-					gridHelper.name="grid";
-					scene.add( gridHelper );
-            	}else
-            	{
-            		//非表示
-            		scene.remove(ob);
-            	}
-            	
-            }
-            //カラー選択
-            var color = document.getElementById("colorid");
-			color.addEventListener('change', (event) => 
-			{
-				scene.background = new THREE.Color(event.target.value);
-				console.log(event.target.value);
-			});
-			// https://www.pazru.net/html5/File/020.html
-			var inFile = document.getElementById("selectedFile");
+      function setCameraPosition() {
+        camera.position.set(guiObj.Camera_x, guiObj.Camera_y, guiObj.Camera_z);
+      }
 
-			//ダイアログでファイルが選択された時
-			inFile.addEventListener("change",function(evt){
+      function setParticleSize() {
+        points.material.size = guiObj.ParticleSize;
+      }
+      // 初期化のために実行
+      onResize();
+      // リサイズイベント発生時に実行
+      window.addEventListener('resize', onResize);
 
-			  var file = evt.target.files;
+      function onResize() {
+        // サイズを取得
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        // レンダラーのサイズを調整する
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(width, height);
+        // カメラのアスペクト比を正す
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      }
 
-			  //FileReaderの作成
-			  var reader = new FileReader();
-			  //テキスト形式で読み込む
-			  reader.readAsText(file[0]);
-			  //読込終了後の処理
-			  reader.onload = function(ev){
-			    //テキストエリアに表示する
-
-					scene = new THREE.Scene();
-					// 平行光源を作成
-					// new THREE.DirectionalLight(色, 光の強さ)
-					const light = new THREE.DirectionalLight(0xFFFFFF, 1);
-					scene.add(light);
-					
-					/////jiku
-					var axes = new THREE.AxisHelper(5);
-					axes.name= "axes";
-					scene.add(axes);
-					var gridHelper = new THREE.GridHelper( 10, 20 );
-					gridHelper.name="grid";
-					scene.add( gridHelper );  
-
-			    var cols = reader.result.split('\n');
-			    var data = [];
-
-			    //document.test.txt.value = cols[0]+"\n";
-
-					document.body.style.cursor = 'wait';
-					
-					let maingeometry = new THREE.Geometry();
-					maingeometry.verticesNeedUpdate = true;
-			    for (var i = 1; i <= cols[0]; i++) {
-			        		data = cols[i].split(' ');
-							if (data.length == 1) data = cols[i].split('\t');
-							maingeometry.vertices.push(new THREE.Vector3(data[1]*100,data[2]*100,data[3]*100));
-							maingeometry.colors.push(new THREE.Color(data[5]/255, data[6]/255, data[7]/255));
-
-			    }
-			    var material1 = new THREE.PointsMaterial( { size: 0.3, vertexColors: THREE.VertexColors } );
-				 points = new THREE.Points( maingeometry, material1 );
-    			scene.add( points );
-    			
-				//geometryコンソール
-				
-					document.body.style.cursor = 'auto';
-
-					animate();
-
-			}  }
-			,false);
+      function gridhyouji() {
+        console.log("クリック");
+        var ob = scene.getObjectByName("grid");
+        if (ob == null) {
+          //表示
+          var gridHelper = new THREE.GridHelper(10, 20);
+          gridHelper.name = "grid";
+          scene.add(gridHelper);
+        } else {
+          //非表示
+          scene.remove(ob);
+        }
+      }
+      //カラー選択
+      var color = document.getElementById("colorid");
+      color.addEventListener('change', (event) => {
+        scene.background = new THREE.Color(event.target.value);
+        console.log(event.target.value);
+      });
+      // https://www.pazru.net/html5/File/020.html
+      var inFile = document.getElementById("selectedFile");
+      //ダイアログでファイルが選択された時
+      inFile.addEventListener("change", function (evt) {
+        var file = evt.target.files;
+        //FileReaderの作成
+        var reader = new FileReader();
+        //テキスト形式で読み込む
+        reader.readAsText(file[0]);
+        //読込終了後の処理
+        reader.onload = function (ev) {
+          //テキストエリアに表示する
+          scene = new THREE.Scene();
+          // 平行光源を作成
+          // new THREE.DirectionalLight(色, 光の強さ)
+          const light = new THREE.DirectionalLight(0xFFFFFF, 1);
+          scene.add(light);
+          /////jiku
+          var axes = new THREE.AxisHelper(5);
+          axes.name = "axes";
+          scene.add(axes);
+          var gridHelper = new THREE.GridHelper(10, 20);
+          gridHelper.name = "grid";
+          scene.add(gridHelper);
+          var cols = reader.result.split('\n');
+          var data = [];
+          //document.test.txt.value = cols[0]+"\n";
+          document.body.style.cursor = 'wait';
+          let maingeometry = new THREE.Geometry();
+          maingeometry.verticesNeedUpdate = true;
+          for (var i = 1; i <= cols[0]; i++) {
+            data = cols[i].split(' ');
+            if (data.length == 1) data = cols[i].split('\t');
+            maingeometry.vertices.push(new THREE.Vector3(data[1] * 100, data[2] * 100, data[3] * 100));
+            maingeometry.colors.push(new THREE.Color(data[5] / 255, data[6] / 255, data[7] / 255));
+          }
+          var material1 = new THREE.PointsMaterial({
+            size: 0.3,
+            vertexColors: THREE.VertexColors
+          });
+          points = new THREE.Points(maingeometry, material1);
+          scene.add(points);
+          //geometryコンソール
+          document.body.style.cursor = 'auto';
+          animate();
+        }
+      }, false);
 		</script>
 	</body>
 </html>
